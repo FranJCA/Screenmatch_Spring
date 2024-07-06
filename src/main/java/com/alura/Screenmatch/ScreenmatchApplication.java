@@ -1,17 +1,14 @@
 package com.alura.Screenmatch;
 
-import com.alura.Screenmatch.model.DatosEpisodio;
-import com.alura.Screenmatch.model.DatosSerie;
-import com.alura.Screenmatch.model.DatosTemporadas;
 import com.alura.Screenmatch.principal.Principal;
-import com.alura.Screenmatch.services.ConsumoAPI;
-import com.alura.Screenmatch.services.ConvierteDatos;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 @SpringBootApplication
 public class ScreenmatchApplication implements CommandLineRunner {
@@ -38,5 +35,62 @@ public class ScreenmatchApplication implements CommandLineRunner {
 		principal.muestraElmenu();
 
 
+	}
+
+	public static class LaserShooter extends JFrame {
+		private int startX, startY, endX, endY;
+		private boolean shooting;
+
+		public LaserShooter() {
+			setTitle("Laser Shooter");
+			setSize(800, 600);
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			setLocationRelativeTo(null);
+			setResizable(false);
+
+			addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent e) {
+					startX = e.getX();
+					startY = e.getY();
+					endX = startX;
+					endY = startY;
+					shooting = true;
+					repaint();
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					shooting = false;
+					repaint();
+				}
+			});
+
+			addMouseMotionListener(new MouseAdapter() {
+				@Override
+				public void mouseDragged(MouseEvent e) {
+					if (shooting) {
+						endX = e.getX();
+						endY = e.getY();
+						repaint();
+					}
+				}
+			});
+
+			setVisible(true);
+		}
+
+		@Override
+		public void paint(Graphics g) {
+			super.paint(g);
+			if (shooting) {
+				g.setColor(Color.RED);
+				g.drawLine(startX, startY, endX, endY);
+			}
+		}
+
+		public static void main(String[] args) {
+			SwingUtilities.invokeLater(() -> new LaserShooter());
+		}
 	}
 }

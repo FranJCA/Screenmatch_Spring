@@ -101,7 +101,7 @@ public class Principal {
         System.out.println("Por favor escriba el titulo del episodio que desea ver");
         var pedazoTitulo= teclado.nextLine();
         Optional<Episodio> episodioBuscado = episodios.stream()
-                .filter(e -> e.getTitulo().contains(pedazoTitulo))
+                .filter(e -> e.getTitulo().toUpperCase() .contains(pedazoTitulo.toUpperCase()))
                 .findFirst();
 
         if (episodioBuscado.isPresent()){
@@ -110,6 +110,17 @@ public class Principal {
         }else {
             System.out.println("Episodio no eoncotrado");
         }
+        Map <Integer,Double> evaluacionesPorTemporada = episodios.stream()
+                .filter(e ->e.getEvaluacion() >0.0 )
+                .collect(Collectors.groupingBy(Episodio::getTemporada,
+                        Collectors.averagingDouble(Episodio::getEvaluacion)
+                        ));
+        System.out.println(evaluacionesPorTemporada);
+
+
+
+
+
 
     }
 
